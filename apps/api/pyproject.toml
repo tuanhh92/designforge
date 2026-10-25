@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "httpx>=0.27", "pgserver>=0.1.4"]
+dev = ["pytest>=8", "httpx>=0.27"]
 
 [project.scripts]
 df-api = "df_api.main:run"

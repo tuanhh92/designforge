@@ -14,9 +14,12 @@ import os
 import socketserver
 from pathlib import Path
 
-PORT = int(os.environ.get("DF_BRIDGE_PORT", "9877"))
-TOKEN = os.environ.get("DF_BRIDGE_TOKEN", "")
-JOB_ROOT = Path(os.environ.get("DF_JOB_ROOT", "./var/jobs")).resolve()
+# Same config as the real extension and the worker: env vars win, else ~/.designforge/bridge.json.
+_CFG_PATH = Path(os.environ.get("DF_BRIDGE_CONFIG", "~/.designforge/bridge.json")).expanduser()
+_CFG = json.loads(_CFG_PATH.read_text()) if _CFG_PATH.is_file() else {}
+PORT = int(os.environ.get("DF_BRIDGE_PORT") or _CFG.get("port", 9877))
+TOKEN = os.environ.get("DF_BRIDGE_TOKEN") or _CFG.get("token", "")
+JOB_ROOT = Path(os.environ.get("DF_JOB_ROOT") or _CFG.get("job_root", "./var/jobs")).expanduser().resolve()
 VERSION = "0.2.0-fake"
 OPS = {"ensure_material", "ensure_tag", "define_panel", "define_proxy", "group", "place", "paint"}
 
@@ -198,7 +201,7 @@ class Handler(socketserver.StreamRequestHandler):
 
 def main() -> None:
     if not TOKEN:
-        raise SystemExit("DF_BRIDGE_TOKEN must be set")
+        raise SystemExit(f"no bridge token: run `make bridge-setup` (creates {_CFG_PATH})")
     socketserver.ThreadingTCPServer.allow_reuse_address = True
     with socketserver.ThreadingTCPServer(("127.0.0.1", PORT), Handler) as srv:
         print(f"[fake-bridge] {VERSION} listening on 127.0.0.1:{PORT}, job root {JOB_ROOT}", flush=True)

@@ -40,32 +40,38 @@ cd python && PYTHONPATH=. pytest -q tests
 
 Upload a furniture photo → AI analysis → FurnitureSpec → parts → 3D model → SketchUp model via MCP.
 
-Needs Python 3.12+, Node 20+, Docker (for Postgres 13+; or point `DATABASE_URL` at any Postgres).
+Needs Python 3.12+ (3.13 tested), Node 20+, and Postgres 13+.
 
 ```bash
 make setup
 ```
 
+Postgres — either Docker (`make db-up`) or, on macOS without Docker, Homebrew Postgres 16 with the
+user and databases `.env` expects:
+
 ```bash
-make db-up
+make db-brew
 ```
 
-Then in four terminals (each loads `.env`):
+Shared config for the SketchUp extension and the worker (port, token, job folder):
 
 ```bash
-make api
+make bridge-setup
+```
+
+Start everything in the background (API :8000, worker, web :3000, and the fake SketchUp bridge when
+`GEOMETRY_ENGINE=sketchup_mcp` and SketchUp is not running). Logs go to `var/log/`:
+
+```bash
+make dev
 ```
 
 ```bash
-make worker
+make status
 ```
 
 ```bash
-make web
-```
-
-```bash
-make bridge-fake
+make stop
 ```
 
 Open http://localhost:3000, upload a photo, and add one measured dimension if you have it.
@@ -88,7 +94,7 @@ Open http://localhost:3000, upload a photo, and add one measured dimension if yo
 make test
 ```
 
-The end-to-end test (`apps/api/tests/test_pipeline_e2e.py`) needs `DATABASE_URL` pointing at a **dedicated** test database: it truncates tables, and a running `make worker` on the same database would race it for jobs.
+The end-to-end test (`apps/api/tests/test_pipeline_e2e.py`) needs `DATABASE_URL` pointing at a **dedicated** test database (`make db-brew` creates `designforge_test`): it truncates tables, and a running `make worker` on the same database would race it for jobs.
 
 ### MVP flow
 
