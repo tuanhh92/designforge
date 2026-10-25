@@ -1,0 +1,128 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# DANH MỤC VẬT TƯ — ván, nhôm, phụ kiện xưởng có. AI và người dùng CHỈ được chọn trong danh sách này.
+#
+# • code: mã duy nhất, viết HOA, không dấu, không khoảng trắng (có thể dùng mã nhà cung cấp).
+#   Đừng đổi code của mục đã dùng trong thiết kế cũ; muốn ngừng dùng thì thêm dòng `active: false`.
+# • Các mục dưới đây là MẪU ban đầu. Hãy thay bằng ván, chỉ, ray, bản lề xưởng bạn thực sự mua.
+# • Sửa xong: khởi động lại API và worker.
+# ─────────────────────────────────────────────────────────────────────────────
+
+materials:
+  # kind: sheet = ván tấm · profile = thanh nhôm/cắt theo chiều dài
+  # grain: none = không vân · length = vân chạy theo chiều dài tấm (không được xoay khi xếp ván)
+  # colour: màu hiển thị trên mô hình 3D (mã HEX)
+  # keywords: từ khoá AI dùng để khớp màu nhìn thấy trong ảnh với ván này (tiếng Anh, chữ thường)
+  # colour_match: true = được chọn khi AI chỉ biết mã màu (không khớp từ khoá nào)
+  # painted: true = dùng khi AI thấy bề mặt sơn/lacquer
+  # default: true = dùng khi không khớp được gì
+
+  - code: MFC18-WHITE
+    kind: sheet
+    thickness: 18
+    grain: none
+    name: Melamine 18 mm White
+    name_vi: MFC 18 mm Trắng
+    colour: "#F2F1EC"
+    keywords: [white, ivory, cream, off-white]
+    colour_match: true
+    default: true
+
+  - code: MFC18-GREY
+    kind: sheet
+    thickness: 18
+    grain: none
+    name: Melamine 18 mm Light Grey
+    name_vi: MFC 18 mm Xám nhạt
+    colour: "#B9B8B3"
+    keywords: [grey, gray, silver, stone]
+    colour_match: true
+
+  - code: MFC18-ANTHR
+    kind: sheet
+    thickness: 18
+    grain: none
+    name: Melamine 18 mm Anthracite
+    name_vi: MFC 18 mm Xám than
+    colour: "#3D3F42"
+    keywords: [anthracite, charcoal, dark grey, dark gray]
+    colour_match: true
+
+  - code: MFC18-BLACK
+    kind: sheet
+    thickness: 18
+    grain: none
+    name: Melamine 18 mm Black
+    name_vi: MFC 18 mm Đen
+    colour: "#1E1E1E"
+    keywords: [black]
+    colour_match: true
+
+  - code: MFC18-OAK
+    kind: sheet
+    thickness: 18
+    grain: length
+    name: Melamine 18 mm Natural Oak
+    name_vi: MFC 18 mm Vân sồi
+    colour: "#C8A27A"
+    keywords: [oak, wood, natural, beige, light wood, ash, birch]
+    colour_match: true
+
+  - code: MFC18-WALNUT
+    kind: sheet
+    thickness: 18
+    grain: length
+    name: Melamine 18 mm Walnut
+    name_vi: MFC 18 mm Óc chó
+    colour: "#6B4A33"
+    keywords: [walnut, dark wood, brown, teak, mahogany]
+    colour_match: true
+
+  - code: MDF18-PAINT
+    kind: sheet
+    thickness: 18
+    grain: none
+    name: MDF 18 mm Painted
+    name_vi: MDF 18 mm Sơn
+    colour: "#E6E2DA"
+    keywords: [painted, lacquer, matte]
+    painted: true
+
+  - code: HDF8-WHITE
+    kind: sheet
+    thickness: 8
+    grain: none
+    name: HDF 8 mm White back
+    name_vi: HDF 8 mm Trắng (tấm hậu)
+    colour: "#EDEDE8"
+
+  - code: ALU-TRACK
+    kind: profile
+    thickness: 0
+    grain: none
+    name: Aluminium sliding track
+    name_vi: Ray nhôm cánh lùa
+    colour: "#B8BCC2"
+
+  - code: ALU-OVAL
+    kind: profile
+    thickness: 0
+    grain: none
+    name: Aluminium oval hanging rail
+    name_vi: Thanh treo nhôm oval
+    colour: "#C9CCD1"
+
+hardware:
+  # family: loại phụ kiện (hinge = bản lề, slide = ray ngăn kéo, handle = tay nắm, leg = chân, ...)
+  # params: thông số kỹ thuật dùng để tính khoan, kích thước
+  - {code: HINGE-110-CLIP, family: hinge, name_vi: Bản lề giảm chấn 110°, params: {opening_angle: 110, cup_diameter: 35}}
+  - {code: SHELF-PIN-5, family: shelf_pin, name_vi: Chốt đợt Ø5, params: {diameter: 5}}
+  - {code: LEG-ADJ-100, family: leg, name_vi: Chân tăng chỉnh 100 mm, params: {height: 100}}
+  - {code: HANDLE-BAR-128, family: handle, name_vi: Tay nắm thanh 128 mm, params: {centres: 128}}
+  - {code: KNOB-30, family: handle, name_vi: Núm tròn Ø30, params: {diameter: 30}}
+  - {code: PUSH-OPEN, family: push_to_open, name_vi: Nhấn mở, params: {}}
+  - {code: GOLA-C, family: gola_profile, name_vi: Thanh gola chữ C, params: {}}
+  - {code: RAIL-OVAL-30, family: rail, name_vi: Thanh treo oval 30, params: {}}
+  - {code: SLIDE-FULL-500, family: slide, name_vi: Ray bi 500 mm, params: {length: 500}}
+  - {code: SLIDING-TRACK-2, family: sliding_track, name_vi: Bộ ray cánh lùa 2 làn, params: {tracks: 2}}
+  - {code: SLIDING-ROLLER, family: sliding_roller, name_vi: Bánh xe cánh lùa, params: {}}
+  - {code: RAIL-SUPPORT, family: rail_support, name_vi: Bát đỡ thanh treo, params: {}}

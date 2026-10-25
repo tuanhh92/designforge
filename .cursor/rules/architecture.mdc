@@ -1,0 +1,27 @@
+---
+description: DesignForge architecture guardrails — always apply
+alwaysApply: true
+---
+
+# DesignForge architecture rules
+
+Read `docs/00-architecture.md` and `docs/01-domain-model.md` before structural changes.
+
+## Non-negotiables
+- The **PartGraph is the source of truth**. Cut lists, BOM, drawings, CNC and SketchUp geometry are projections of it. Never read manufacturing data back from SketchUp or a mesh.
+- LLMs may only produce `ImageObservation` and `FurnitureSpec`. Never call an LLM from `df_parametric`, `df_manufacturing`, `df_drawings` or `df_rules`.
+- Domain dimensions are **integer millimetres**. No floats for lengths in `df_domain`, `df_parametric`, `df_manufacturing`. Convert units only at adapter edges (SketchUp `.mm`, UI display).
+- `df_parametric` generators are pure and deterministic: no I/O, no clock, no randomness, no `hash()` (randomised per process — use hashlib), stable output order.
+- Respect the import rules: `df_domain` imports nothing internal; SDKs (openai, anthropic, mcp, supabase, celery) only inside adapter modules.
+- Every tenant query is scoped by `org_id` in the repository layer even though RLS exists.
+- Approved `design_versions` are immutable. Edits create a new version.
+
+## Tests
+- For any change in `df_parametric`, `df_manufacturing`, `df_rules`, `df_geometry/engine.py`: write or update tests first.
+- Never change an expected number in a deterministic test to make it pass unless the commit message explains the domain reason (e.g. "hinge rule: >2000 mm doors get 5 hinges").
+- Golden PartGraph snapshots in `python/tests/golden/` change only with an explicit reason.
+
+## Style
+- Python 3.12, Pydantic v2, `ruff` + `mypy --strict` on `python/`. FastAPI routers stay thin; logic lives in application services and domain.
+- TypeScript strict; generated types in `packages/contracts/src/generated` are never hand-edited.
+- Use the ubiquitous language: gable, carcass, divider, back, plinth, front, reveal, edge band, cut size, rule pack.

@@ -1,0 +1,22 @@
+[project]
+name = "designforge-core"
+version = "0.1.0"
+description = "DesignForge domain, AI, parametric and geometry libraries"
+requires-python = ">=3.12"
+dependencies = [
+  "pydantic>=2.9",
+]
+
+[project.optional-dependencies]
+ai = ["openai>=1.60", "anthropic>=0.45"]
+mcp = ["mcp>=2.0,<3"]
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["df_domain", "df_ai", "df_parametric", "df_geometry"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

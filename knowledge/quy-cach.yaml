@@ -1,0 +1,62 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# QUY CÁCH XƯỞNG — DesignForge đọc file này mỗi khi khởi động API / worker.
+#
+# • Đơn vị: milimét (mm), số nguyên.
+# • Tên khoá (bên trái dấu ":") là tên trong code — KHÔNG đổi tên khoá, chỉ sửa giá trị.
+# • Các giá trị dưới đây là MẶC ĐỊNH ban đầu do DesignForge đề xuất. Dòng nào có
+#   "# CẦN XƯỞNG XÁC NHẬN" thì hãy thay bằng số xưởng bạn thực sự dùng.
+#   (Xem bảng câu hỏi: knowledge/cau-hoi-xuong.md)
+# • Sửa xong: khởi động lại API và worker. Thiết kế cũ giữ nguyên; bấm "Dựng lại mô hình"
+#   để áp dụng quy cách mới.
+# ─────────────────────────────────────────────────────────────────────────────
+
+version: 1          # tăng lên 1 mỗi khi đổi quy cách, để biết thiết kế nào dựng theo bản nào
+
+carcass:            # THÙNG TỦ
+  thickness: 18     # độ dày ván thùng (mm): 17 hoặc 18 — CẦN XƯỞNG XÁC NHẬN
+
+edge_band:          # CHỈ DÁN CẠNH
+  visible_thickness: 1   # độ dày chỉ ở cạnh lộ (mm): 0.4 / 1 / 2 — CẦN XƯỞNG XÁC NHẬN
+  premill: 0             # máy dán cạnh có phay bớt trước khi dán không? (mm phay mỗi cạnh, 0 = không)
+
+back:               # HẬU TỦ (lắp vào rãnh)
+  thickness: 8      # độ dày tấm hậu HDF (mm) — CẦN XƯỞNG XÁC NHẬN (thường 3, 5 hoặc 8)
+  groove_inset: 16  # rãnh hậu cách mép sau của hông (mm)
+  groove_depth: 10  # độ sâu rãnh hậu (mm)
+
+shelf:              # ĐỢT DI ĐỘNG
+  front_setback: 20   # đợt lùi vào so với mép trước thùng (mm)
+  side_clearance: 2   # tổng khe hở hai bên để đợt dễ tháo lắp (mm)
+
+system32:           # HÀNG LỖ CHỐT ĐỢT (hệ 32)
+  front_setback: 37   # hàng lỗ trước cách mép trước (mm)
+
+hinge:              # BẢN LỀ (cánh mở)
+  end_distance: 100       # bản lề trên/dưới cách đầu cánh (mm)
+  cup_edge_distance: 22   # mép chén bản lề cách cạnh cánh (mm) — theo hãng bản lề
+
+sliding:            # CÁNH LÙA
+  track_depth: 90         # phần chiều sâu phía trước dành cho ray + cánh (mm) — CẦN XƯỞNG XÁC NHẬN
+  top_rail_height: 45     # chiều cao ray trên (mm) — theo loại ray xưởng dùng
+  bottom_rail_height: 10  # chiều cao ray dưới (mm) — theo loại ray xưởng dùng
+  overlap: 40             # hai cánh chồng mí lên nhau khi đóng (mm) — CẦN XƯỞNG XÁC NHẬN
+
+hanging:            # THANH TREO ÁO
+  rail_from_top: 60       # tâm thanh treo cách mặt dưới đợt cố định phía trên (mm)
+
+hardware:           # PHỤ KIỆN MẶC ĐỊNH (mã phải có trong danh-muc.yaml)
+  hinge: HINGE-110-CLIP
+  shelf_pin: SHELF-PIN-5
+  sliding_track: SLIDING-TRACK-2
+  sliding_roller: SLIDING-ROLLER
+  hanging_rail: RAIL-OVAL-30
+  rail_support: RAIL-SUPPORT
+
+limits:             # GIỚI HẠN KIỂM TRA (vượt quá sẽ báo cảnh báo/lỗi trong phần "Kiểm tra")
+  max_door_leaf_width: 600   # cánh mở bản lề rộng hơn mức này dễ xệ (mm)
+  max_shelf_span_18: 900     # đợt 18 mm dài hơn mức này dễ võng (mm)
+  max_panel_length: 2750     # chiều dài tấm lớn nhất cắt được từ khổ ván (mm) — theo khổ ván xưởng mua
+  min_hanging_depth: 500     # chiều sâu sử dụng tối thiểu để treo áo (mm)
+  min_hanging_height: 800    # chiều cao khoang treo tối thiểu (mm)
+  max_sliding_leaf: 1100     # cánh lùa rộng hơn mức này nặng, dễ vênh (mm)
+  min_sliding_leaf: 400      # cánh lùa hẹp hơn mức này không hợp lý (mm)

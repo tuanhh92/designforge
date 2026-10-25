@@ -1,0 +1,22 @@
+# Mẫu thông tin một tủ đã làm — chép file này vào thư mục mẫu mới và điền.
+ten: Tủ áo cánh lùa phòng ngủ master
+loai: wardrobe                 # wardrobe | bookcase | base_cabinet | wall_cabinet | tall_cabinet | sideboard | ...
+anh: [anh-1.jpg]
+
+kich_thuoc_that_mm: {rong: 2000, cao: 2400, sau: 650}
+chan_de: plinth                # plinth (len chân) | legs (chân) | none
+van_thung: MFC18-OAK           # mã trong danh-muc.yaml
+van_canh: MFC18-OAK
+
+canh:
+  kieu: sliding                # sliding (cánh lùa) | hinged (cánh mở) | none
+  so_canh: 2
+
+khoang:                        # trái → phải, mỗi khoang liệt kê ngăn từ dưới lên
+  - rong_mm: auto
+    ngan: [treo_ao, hoc_tren_400]
+  - rong_mm: auto
+    ngan: [dot_4]
+
+ghi_chu: |
+  Khách yêu cầu thêm 2 ngăn kéo dưới khoang phải (chưa có trong ảnh).

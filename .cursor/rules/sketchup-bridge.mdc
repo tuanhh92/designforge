@@ -1,0 +1,13 @@
+---
+description: Rules for the SketchUp bridge (Ruby) and MCP server
+globs: extensions/**, python/df_geometry/**
+---
+
+- SketchUp Ruby API runs on the main thread only. Never use `Thread.new` for model access; poll from `UI.start_timer`.
+- Every batch of model changes is wrapped in `model.start_operation(name, true)` / `commit_operation`, with `abort_operation` on error.
+- Convert mm → inches with `.mm` and back with `.to_mm` at the boundary. Wire format is always mm.
+- Never trigger UI that can open a modal dialog (`Sketchup.file_new` on a modified model, `UI.messagebox`, export option dialogs with `show_summary: true`).
+- New bridge ops must be added to the `OPS` whitelist in Ruby AND as a Pydantic command in `df_geometry/commands.py`, with a compiler test.
+- File paths must go through `safe_path` (job root only).
+- `eval_ruby` is debug-only (`DF_ALLOW_EVAL=1`); production builds must not register it.
+- Bump `VERSION` in the bridge on any behaviour change; geometry cache keys include it.
