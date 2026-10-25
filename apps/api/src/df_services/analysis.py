@@ -52,10 +52,15 @@ async def analyze(images: list[SourceImage], category_hint: str | None, notes: s
 
     inputs = [ImageInput(image_id=i.id, url=_data_url(b), role="reference") for i, b in zip(images, blobs)]
     model = _vision_model(settings)
-    observation, meta = await extract_with_repair(
-        model, system=PERCEPTION_SYSTEM, prompt=perception_user_prompt(category_hint, notes),
-        images=inputs, schema=ImageObservation, prompt_version=PERCEPTION_VERSION,
-    )
+    try:
+        observation, meta = await extract_with_repair(
+            model, system=PERCEPTION_SYSTEM, prompt=perception_user_prompt(category_hint, notes),
+            images=inputs, schema=ImageObservation, prompt_version=PERCEPTION_VERSION,
+        )
+    finally:
+        # Close the HTTP client while this event loop is alive; otherwise it is closed on garbage
+        # collection after asyncio.run() returns, leaking the connection and logging "Event loop is closed".
+        await model.client.close()
     return AnalysisResult(observation, meta)
 
 
